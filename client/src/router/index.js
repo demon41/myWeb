@@ -11,8 +11,13 @@ const routes = [
     component: Home
   },
   {
+    path: '/choose',
+    name: 'Choose',
+    component: () => import('@/views/Choose.vue')
+  },
+  {
     path: '/fateList',
-    name: 'fateList',
+    name: 'FateList',
     component: () => import('@/views/fate/fate_list.vue')
   },
 ]

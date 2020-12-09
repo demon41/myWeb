@@ -4,21 +4,36 @@
     <div class="snow_all">
       <div v-for="item in snowNums" :key="item" class="snow"></div>
     </div>
-    <div class="content">
+    <div class="content" v-if="!showLogin">
         <div class="reveal">sword art online</div>
         <div class="botton_box" style=" visibility: hidden;" ref="linkStart">
-            <button class="btn btn-primary btn-ghost btn-shine" @click="goLink('fateList')">
+            <button class="btn btn-primary btn-ghost btn-shine" @click="goLink()">
                 link start
             </button>
         </div>
+    </div>
+    <div class="login_box" v-if="showLogin">
+      <div class="login_box_log">sword art online</div>
+      <el-input class="login_box_input" placeholder="用户名" v-model="login.name" clearable></el-input>
+      <el-input class="login_box_input" placeholder="密码" v-model="login.password" clearable></el-input>
+      <button class="btn btn-primary btn-ghost btn-shine" style="width: 100%" @click="submitForm">
+          登录
+      </button>
+      
     </div>
   </div>
 </template>
 
 <script>
+  import { login } from '../api/login'
   export default {
     data () {
       return {
+        showLogin: false,
+        login: {
+          name: '',
+          password: ''
+        }
       }
     },
     mounted () {
@@ -44,8 +59,22 @@
             bottonBox.style.visibility = ''
         }, 4000)
       },
-      goLink (routeName) {
-        this.$router.push({ name: routeName })
+      goLink () {
+        this.showLogin = true
+        // this.$router.push({ name: routeName })
+      },
+      submitForm () {
+        login(this.login).then(res => {
+          if (res.data.code === 200) {
+            this.$router.push({ name: 'Choose' })
+          } else {
+            alert(res.data.msg)
+            // this.$message.error(res.data.msg)
+          }
+        })
+      },
+      resetForm () {
+
       }
     },
     computed: {
@@ -78,5 +107,32 @@
     justify-content: center;
     align-items: center;
     margin-top: 80px;
+  }
+  .login_box {
+    position: absolute;
+    left:50%;
+    top:50%;
+    width: 400px;
+    transform: translate(-50%, -50%);
+  }
+  .login_box_input {
+    margin-bottom: 32px;
+  }
+  .login_box_log {
+    color: #6ee1f5;
+    font-size: 2em;
+    font-family: Raleway, sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    white-space: pre;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+</style>
+<style>
+  .login_box_input .el-input__inner {
+    background-color: rgba(17, 23, 32, 0) !important;
+    color: #fff;
+    border: 1px solid rgb(0,185,209);
   }
 </style>
