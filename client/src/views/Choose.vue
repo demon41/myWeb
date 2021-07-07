@@ -1,6 +1,6 @@
 <template>
   <div class="choose_box">
-    <div class="choose_item" v-for="item in imgList" :key="item.id">
+    <div class="choose_item" v-for="item in imgList" :key="item.id" @click="goPage(item.routeName)">
       <div class="choose_title">{{ item.title }}</div>
       <div class="choose_cover"></div>
       <img :src="item.url" alt="">
@@ -9,24 +9,24 @@
 </template>
 
 <script>
+import { getChooseImage } from '@/api/login'
 export default {
   data () {
     return {
-      imgList: [
-        {
-          id: 0,
-          title: '游戏王',
-          url: require('../assets/image/4444.jpg')
-        },
-        {
-          id: 1,
-          url: require('../assets/image/4444.jpg')
-        },
-        {
-          id: 2,
-          url: require('../assets/image/4444.jpg')
-        }
-      ]
+      imgList: []
+    }
+  },
+  created () {
+    getChooseImage().then(res => {
+      this.imgList = res.data.imgurls
+      this.imgList.forEach(item => {
+        item.url = process.env.VUE_APP_API_BASE_URL + item.url
+      })
+    })
+  },
+  methods: {
+    goPage(name) {
+      this.$router.push({ name })
     }
   }
 }
@@ -38,6 +38,8 @@ export default {
 }
 .choose_box .choose_item{
   width: calc(100% / 3);
+  min-width: 600px;
+  min-height: 900px;
   position: relative;
   box-sizing: border-box;
   height: 100vh;

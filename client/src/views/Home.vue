@@ -25,7 +25,7 @@
 </template>
 
 <script>
-  import { login } from '../api/login'
+  import { login } from '@/api/login'
   export default {
     data () {
       return {
@@ -35,6 +35,9 @@
           password: ''
         }
       }
+    },
+    created () {
+      console.log(process.env.VUE_APP_API_BASE_URL)
     },
     mounted () {
       this.init()
@@ -66,6 +69,7 @@
       submitForm () {
         login(this.login).then(res => {
           if (res.data.code === 200) {
+            localStorage.setItem('token', res.data.token)
             this.$router.push({ name: 'Choose' })
           } else {
             alert(res.data.msg)

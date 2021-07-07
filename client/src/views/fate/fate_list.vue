@@ -6,13 +6,14 @@
         :src="item.icon" 
         :preview-src-list="[`http://fgo-cdn.vgtime.com/media/fgo/servant/card/${item.charid}A.png`,`http://fgo-cdn.vgtime.com/media/fgo/servant/card/${item.charid}B.png`,`http://fgo-cdn.vgtime.com/media/fgo/servant/card/${item.charid}C.png`,`http://fgo-cdn.vgtime.com/media/fgo/servant/card/${item.charid}D.png`]">
       </el-image>
+
       <!-- <img :src="item.icon" alt=""> -->
     </div>
   </div>
 </template>
 
 <script>
-import { getList } from '../../api/fate'
+import { getList } from '@/api/fate'
 export default {
   data () {
     return {
@@ -21,14 +22,14 @@ export default {
     }
   },
   created () {
-    var picIndex = 0
-    // getList({ pn:picIndex }).then(res => {
-    //   if (res.data.data.length === 0) {
-    //     clearInterval(this.picTimer)
-    //   } else {
-    //     this.picList.push(...res.data.data)
-    //   }
-    // })
+    var picIndex = 1
+    getList({ pn:picIndex }).then(res => {
+      if (res.data.data.length === 0) {
+        clearInterval(this.picTimer)
+      } else {
+        this.picList.push(...res.data.data)
+      }
+    })
     this.picTimer = setInterval(() => {
       picIndex ++ 
       getList({ pn:picIndex }).then(res => {
@@ -37,6 +38,8 @@ export default {
         } else {
           this.picList.push(...res.data.data)
         }
+      }).catch(err => {
+        clearInterval(this.picTimer)
       })
     }, 1000)
   }

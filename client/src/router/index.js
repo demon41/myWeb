@@ -20,6 +20,11 @@ const routes = [
     name: 'FateList',
     component: () => import('@/views/fate/fate_list.vue')
   },
+  {
+    path: '/yan',
+    name: 'Yan',
+    component: () => import('@/views/yan/yan.vue')
+  }
 ]
 
 const router = new VueRouter({
